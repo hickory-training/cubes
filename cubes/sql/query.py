@@ -22,7 +22,7 @@ from collections import namedtuple
 
 import sqlalchemy as sa
 import sqlalchemy.sql as sql
-from sqlalchemy.sql.expression import and_
+from sqlalchemy.sql.expression import and_, or_
 
 from ..metadata import object_dict
 from ..errors import InternalError, ModelError, ArgumentError, HierarchyError
@@ -714,7 +714,7 @@ class StarSchema(object):
         # 2. construct the condition
         # 3. use the appropriate SQL JOIN
         # 4. wrap the star with detail
-        # 
+        #
         # TODO: support MySQL partition (see Issue list)
 
         # First table does not need to be joined. It is the "fact" (or other
@@ -1008,7 +1008,7 @@ class QueryContext(object):
             column = self.column(level_key)
             conditions.append(column == value)
 
-        condition = sql.expression.and_(*conditions)
+        condition = sql.expression.or_(*conditions)
 
         if invert:
             condition = sql.expression.not_(condition)
@@ -1109,4 +1109,3 @@ class QueryContext(object):
         label = label or SPLIT_DIMENSION_NAME
 
         return split_column.label(label)
-
